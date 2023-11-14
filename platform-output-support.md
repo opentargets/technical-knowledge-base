@@ -14,7 +14,7 @@
   make set_profile profile='development'
   make image
   ```
-- The data images (one for clickhouse, one for elastic/opensearch) are built and then the POS VM is destroyed. Allow a few hours.
+- The data images (one for clickhouse, one for elastic/opensearch) are built and then the POS VM is stops. Allow a few hours.
 - Take a note of the details from the output e.g.
   ```json
   data_disk_images = {
@@ -42,3 +42,5 @@
 - Search the logs for "Count for" to check that the clickhouse tables all have records
   
  
+### Final steps
+- Clean the infrastructure `make clean_image_infrastructure`

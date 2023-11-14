@@ -67,7 +67,7 @@ docker run -v /home/$USER/opentargets/output:/srv/output -v /home/$USER/opentarg
 
 #### Final Steps
 
-- CHeck the files are copied to the bucket `gs://open-targets-pre-data-releases/$RELEASE_VERSION/input`
+- Check the files are copied to the bucket `gs://open-targets-pre-data-releases/$RELEASE_VERSION/input`
 - Check the manifest file to see all the steps ran correctly. You can do that using `jq 'del(.steps)' manifest.json`. If there's any errors you can do additional checks using the following commands:
   - `jq '' manifest.json` : query all information
   - `jq 'del(.steps)' manifest.json` : query the header with no steps information
