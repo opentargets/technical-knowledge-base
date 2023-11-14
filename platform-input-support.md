@@ -1,4 +1,4 @@
-#Platform Input Support
+# Platform Input Support
 
 [Repo](https://github.com/opentargets/platform-input-support)
 
