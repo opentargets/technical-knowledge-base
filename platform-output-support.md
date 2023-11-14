@@ -40,7 +40,13 @@
 - To follow the logs: `pos_logs_startup_tail`
 - To check the end of the final POS logs in the google bucket from above for elastic/opensearch indices should all contain data except for `otar_projects` (except if ppp)
 - Search the logs for "Count for" to check that the clickhouse tables all have records
-  
- 
+
+### Release data
+> [!WARNING
+> Only execute for production deployments
+- Pre-release `make syncgs`
+- EBI FTP release `make sync`
+- BigQuery `make bigqueryprod`
+
 ### Final steps
 - Clean the infrastructure `make clean_image_infrastructure`
