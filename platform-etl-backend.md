@@ -4,6 +4,7 @@
 
 - Java:11
 - Scala: 2.12
+- gcloud cli
 
 ## Steps
 
@@ -22,8 +23,9 @@ evidences.data-sources-exclude = ["ot_crispr", "encore", "ot_crispr_validation"]
 etl-dag.resolve = false
 ```
 
-- Copy the config file to the release bucket with the name platform.conf using the follow command: ``Build the JAR file for the ETL using`sbt -J-Xss2M -J-Xmx2G assembly'`. The path for the JAR file will be `target/scala-<scala_version>/etl-backend-<commit>.jar`
-- Create the Workflow configuration file with the name `configuration/<year>/workflow_<release>.conf`. Here you'll need to sepecify:
+- Copy the config file to the release bucket with the name platform.conf using the follow command: `gcloud cp configuration/<year>/<release>_platform.conf gs://open-targets-pre-data-releases/<release>/conf/`
+- Build the JAR file for the ETL using`sbt -J-Xss2M -J-Xmx2G assembly'`. The path for the JAR file will be `target/scala-<scala_version>/etl-backend-<commit>.jar`
+- Copy the jar file to the release bucket using the follow command: `gcloud cp target/scala-<scala_version>/etl-backend-<commit>.jar gs://open-targets-pre-data-releases/<release>/jars/`- Create the Workflow configuration file with the name `configuration/<year>/workflow_<release>.conf`. Here you'll need to sepecify:
 
 1. config.path: gs bucket path to the config file
 2. config.file: name of the config file
@@ -36,3 +38,9 @@ workflow-resources.config.file = "platform.conf"
 workflow-resources.jar.path = "gs://open-targets-pre-data-releases/<release>/jars/"
 workflow-resources.jar.file = "etl-backend-<commit>.jar"
 ```
+
+- Build the JAR file for the Workflow using`sbt -J-Xss2M -J-Xmx2G workflow/assembly'`. The path for the JAR file will be `workflow/target/scala-<scala_version>/etl-backend-<commit>.jar`
+- Run the workflow JAR to create a Dataproc cluster in which the ETL will run. To do this run the folowing command `java -jar <workflow_jar> workflow --config <workflow_config> public`. By using the `public` parameter we're running the etl for platform. You'll need to set:
+
+1. workflow_jar: the path to the workflow JAR file
+2. workflow_config: the path to the .conf file for workflow
