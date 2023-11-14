@@ -16,7 +16,7 @@
   ```
 - The data images (one for clickhouse, one for elastic/opensearch) are built and then the POS VM is stops. Allow a few hours.
 - Take a note of the details from the output e.g.
-  ```json
+  ```python
   data_disk_images = {
     "clickhouse" = "posdevpf-20230921-0622-ch"
     "elastic_search" = "posdevpf-20230921-0622-es"
