@@ -5,4 +5,4 @@
  - [platform input support](platform-input-support.md)
  - [etl](platform-etl-backend.md)
  - [platform output support](platform-output-support.md)
- - [terraform]()
+ - [terraform](terraform-google-open-targets-platform.md)
