@@ -42,7 +42,7 @@
 - Search the logs for "Count for" to check that the clickhouse tables all have records
 
 ### Release data
-> [!WARNING
+> [!WARNING]
 > Only execute for production deployments
 - Pre-release `make syncgs`
 - EBI FTP release `make sync`
