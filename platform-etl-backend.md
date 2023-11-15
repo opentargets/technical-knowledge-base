@@ -24,7 +24,7 @@ etl-dag.resolve = false
 ```
 
 - Copy the config file to the release bucket with the name platform.conf using the follow command: `gcloud cp configuration/<year>/<release>_platform.conf gs://open-targets-pre-data-releases/<release>/conf/`
-- Build the JAR file for the ETL using`sbt -J-Xss2M -J-Xmx2G assembly'`. The path for the JAR file will be `target/scala-<scala_version>/etl-backend-<commit>.jar`
+- Build the JAR file for the ETL using`sbt -J-Xss2M -J-Xmx2G assembly`. The path for the JAR file will be `target/scala-<scala_version>/etl-backend-<commit>.jar`
 - Copy the jar file to the release bucket using the follow command: `gcloud cp target/scala-<scala_version>/etl-backend-<commit>.jar gs://open-targets-pre-data-releases/<release>/jars/`- Create the Workflow configuration file with the name `configuration/<year>/workflow_<release>.conf`. Here you'll need to sepecify:
 
 1. config.path: gs bucket path to the config file
