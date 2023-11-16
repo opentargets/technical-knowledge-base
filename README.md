@@ -17,7 +17,7 @@
 3. [Make data images](platform-output-support.md#make-the-data-images)
 
 #### *DEV*, *DEV-PPP* or *PPP* 
-tbc
+to follow
 
 ## Deploy data/software to production
 - Deploying data or software is conceptually the same with terraform.
@@ -31,8 +31,8 @@ tbc
 1. If releasing data - do the release data step from [POS](platform-output-support.md#release-data)
 2. Setup the prod profile in the [terraform repo](terraform-google-open-targets-platform.md) and execute
 
-#### *DEV-PPP*
-#### *PPP* 
+#### *DEV-PPP* or *PPP* 
+to follow
 
 ## Deploy an updated component e.g. data image, webapp or the API
 1. Exactly as [above](#deploy-datasoftware-to-production) but leave all variables in the profile as they were except the ones you want to modify. E.g. if you _only_ want to bump the webapp version, just change the version number for the webapp in the config.
