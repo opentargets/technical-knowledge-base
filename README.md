@@ -10,13 +10,13 @@
 
 ## Generate the data
 
-#### *DEV* or *PROD*
+#### *PROD*
 
 1. Get the data and stage it for the ETL by running the entire [platform input support](platform-input-support.md)
 2. Transform the data by running the entire [etl](platform-etl-backend.md)
 3. [Make data images](platform-output-support.md#make-the-data-images)
 
-#### *DEV-PPP* or *PPP* 
+#### *DEV*, *DEV-PPP* or *PPP* 
 tbc
 
 ## Deploy data/software to production
