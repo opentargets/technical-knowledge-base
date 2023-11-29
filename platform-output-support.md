@@ -44,9 +44,17 @@
 ### Release data
 > [!WARNING]
 > Only execute for production deployments
-- Pre-release `make syncgs`
-- EBI FTP release `make sync`
-- BigQuery `make bigqueryprod`
+- Sync from pre-release to release bucket using the following: `make syncgs`
+- Write data BigQuery
+  - Write to DEV first and get checked by the team: `make bigquerydev`
+  - Then if OK, write to PROD: `make bigqueryprod`
+- EBI FTP release
+  - Your EBI user must be a member of `opent` group.
+  - Your EBI user must be able to become `otftpuser` virtual user.
+  - Setup ssh keys with EBI cluster
+    - Ensure you have a public key locally (e.g. using ssh-keygen)
+    - Copy your public to the EBI cluster e.g. `ssh-copy-id -i  ~/.ssh/<KEY_NAME>.pub <USER>@codon-login`
+  - Run the FTP sync script `make sync`
 
 ### Final steps
 - Clean the infrastructure `make clean_image_infrastructure`
