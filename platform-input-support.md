@@ -35,9 +35,6 @@ _Note: this could be done by terraform_
 - run the following (change the `IMAGE_TAG` and `RELEASE_VERSION` accordingly)
 
 ```bash
-IMAGE_TAG="release_23-12"
-RELEASE_VERSION="23.12"
-
 sudo apt-get update
 sudo apt-get install ca-certificates curl gnupg
 sudo install -m 0755 -d /etc/apt/keyrings
@@ -49,12 +46,11 @@ echo \
   sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
 sudo apt-get update
 sudo apt-get install docker-ce tmux
-sudo groupadd docker
 sudo usermod -a -G docker $USER
 newgrp docker
-mkdir -p opentargets/credentials
-mkdir -p opentargets/output
-mkdir -p opentargets/log
+mkdir -m 775 -p opentargets/credentials
+mkdir -m 775 -p opentargets/output
+mkdir -m 775 -p opentargets/log
 gsutil cp gs://open-targets-ops/credentials/pis-service_account.json opentargets/credentials/open-targets-gac.json
 ```
 
@@ -62,7 +58,12 @@ gsutil cp gs://open-targets-ops/credentials/pis-service_account.json opentargets
 
 ```bash
 tmux new -s pisrun
-docker run -v /home/$USER/opentargets/output:/srv/output -v /home/$USER/opentargets/log:/usr/src/app/log -v /home/$USER/opentargets/credentials/open-targets-gac.json:/srv/credentials/open-targets-gac.json quay.io/opentargets/platform-input-support:$IMAGE_TAG -o /srv/output --log-level=DEBUG -gkey /srv/credentials/open-targets-gac.json -gb open-targets-pre-data-releases/$RELEASE_VERSION/input --exclude otar
+
+# Set image and release versions
+IMAGE_TAG="release_23-12"
+RELEASE_VERSION="23.12"
+
+docker run -v /home/$USER/opentargets/output:/srv/output -v /home/$USER/opentargets/log:/usr/src/app/log -v /home/$USER/opentargets/credentials/open-targets-gac.json:/srv/credentials/open-targets-gac.json quay.io/opentargets/platform-input-support:$IMAGE_TAG -o /srv/output --log-level=DEBUG -gkey /srv/credentials/open-targets-gac.json -gb open-targets-pre-data-releases/$RELEASE_VERSION/input -exclude otar pppevidence
 ```
 
 #### Final Steps
