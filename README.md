@@ -1,38 +1,26 @@
-# Platform Technical Documentation
+# Open Targets technical documentation
 
-- How to run the indivdual stages:
-  - [platform input support](platform-input-support.md)
-  - [etl](platform-etl-backend.md)
-  - [platform output support](platform-output-support.md)
-  - [data/software deployment](terraform-google-open-targets-platform.md)
+This repository is a central technical knowledge base for Open Targets. Here we
+will show standard operation procedures, architectural overviews, and best
+practices to be followed across the organisation.
 
-  
+It will also be a useful resource to onboard new team members, and help the
+community understand how we build and maintain our systems.
 
-## Generate the data
+# Table of contents
 
-#### *PROD*
+## Platform
+### [Technical overview](platform/technical-overview.md)
+### [Release process](platform/release-process.md)
+### [Operations](platform/operations.md)
 
-1. Get the data and stage it for the ETL by running the entire [platform input support](platform-input-support.md)
-2. Transform the data by running the entire [etl](platform-etl-backend.md)
-3. [Make data images](platform-output-support.md#make-the-data-images)
+## Data pipeline
+### [Technical overview](data-pipeline/technical-overview.md)
+### [Release process](data-pipeline/release-process.md)
+### [Operations](data-pipeline/operations.md)
 
-#### *DEV*, *DEV-PPP* or *PPP* 
-to follow
-
-## Deploy data/software to production
-- Deploying data or software is conceptually the same with terraform.
-- Deploying data requires the data images to be built - see [above](#generate-the-data). 
-- Deploying software - except for the webapp, requires the images to be built (see individual repos) in advance. In terraform you reference the specifc image/tag in the terraform config to deploy that version of the data/software.
-
-#### *DEV*
-1. Setup the dev profile in the [terraform repo](terraform-google-open-targets-platform.md) and execute.
-
-#### *PROD*
-1. If releasing data - do the release data step from [POS](platform-output-support.md#release-data)
-2. Setup the prod profile in the [terraform repo](terraform-google-open-targets-platform.md) and execute
-
-#### *DEV-PPP* or *PPP* 
-to follow
-
-## Deploy an updated component e.g. data image, webapp or the API
-1. Exactly as [above](#deploy-datasoftware-to-production) but leave all variables in the profile as they were except the ones you want to modify. E.g. if you _only_ want to bump the webapp version, just change the version number for the webapp in the config.
+## Shared practices
+### [Naming conventions](shared-practices/naming-conventions.md)
+### [Git workflow](shared-practices/git-workflow.md)
+### [Coding standards](shared-practices/coding-standards.md)
+### [Security practices](shared-practices/security-practices.md)
