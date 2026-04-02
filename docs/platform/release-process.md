@@ -1,12 +1,30 @@
-# Platform Output Support
+---
+icon: lucide/rocket
+---
 
-[Repo](https://github.com/opentargets/platform-output-support)
+# Release Process
+
+We have four releases per year (usually end of every Q): `YY.03`, `YY.06`, `YY.09`, `YY.12`.
+We have two product favors per release: **Platform** and **PPP**.
+
+## Platform
+
+
+---
+
+!!! note
+    old docs below
+
+
+## Platform Output Support
+
+[Repo](https://github.com/opentargets/pos)
 
 ## Platform release
 ### Make the data images
 - *Clone* the repo
 - *Checkout* a release branch from `main` e.g. `release_23-12`
-- *update* **release_ids**, **data_locations** and **datasource** in the profiles: 
+- *update* **release_ids**, **data_locations** and **datasource** in the profiles:
   - `./profiles/config.development`
 - *Commit* and *push* to public repo
 - Set the profile and create the data images
@@ -58,3 +76,25 @@
 
 ### Final steps
 - Clean the infrastructure `make clean_image_infrastructure`
+
+
+
+# Terraform Google Platform
+
+- Clone the github repository [terraform-google-opentargets-platform](https://github.com/opentargets/terraform-google-opentargets-platform)
+
+## Setup the profile
+#### *PROD*
+- Checkout a release branch from `main` e.g. `release_23-12`
+- Get the necessary credentials for the deployment using `make credentials`
+- Create a copy if the previous release profile e.g. `deployment_context.2312`. Update the necessary information for the release. This will usually include data versions, webapp version, api version, openai versions and any other changes specific to the release.
+- Link the release profile to the production profile using `make update_linked_profile profile=2312 link_to_profile=production-platform`
+- Set the current profile `make set_profile profile=production-platform`
+
+#### *DEV*
+- Set the current profile `make set_profile profile=dev-platform`
+
+## Edit the profile and deploy
+- Update the deployment profile with the new information.
+- Evaluate the deployment plan by using `terraform plan` and verify that the output matches the expected changes
+- Execute the plan using `terraform apply`
