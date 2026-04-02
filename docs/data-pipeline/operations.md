@@ -1,2 +1,2 @@
-# Open Targets coding standards
+# Operations
 [(back to index)](../README.md)

@@ -1,2 +1,2 @@
-# Open Targets Git workflow
+# Operations
 [(back to index)](../README.md)
