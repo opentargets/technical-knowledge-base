@@ -1,7 +1,6 @@
 [project]
-name = "platform-technical-docs"
-version = "0.1.0"
-description = "Add your description here"
+name = "technical-knowledge-base"
+version = "0.0.1"
 readme = "README.md"
 requires-python = ">=3.14"
 dependencies = []
