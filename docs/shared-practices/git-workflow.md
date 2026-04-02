@@ -1,2 +1,5 @@
+---
+icon: lucide/git-branch
+---
+
 # Git Workflow
-[(back to index)](../README.md)

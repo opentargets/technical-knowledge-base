@@ -1,2 +1,5 @@
+---
+icon: lucide/shield
+---
+
 # Security Practices
-[(back to index)](../README.md)

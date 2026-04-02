@@ -1,2 +1,5 @@
+---
+icon: lucide/tag
+---
+
 # Naming Conventions
-[(back to index)](../README.md)

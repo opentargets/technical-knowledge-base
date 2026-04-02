@@ -1,2 +1,5 @@
+---
+icon: lucide/code-xml
+---
+
 # Coding Standards
-[(back to index)](../README.md)
