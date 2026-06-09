@@ -105,11 +105,14 @@ First checks you can do:
     check that things look as they should.
 
 ### 4. Promote to production
-On release day, and once all tests are confirmed to be passing and things look
-correct:
-
+Before release day:
+- Once all tests are confirmed to be passing and things look correct, build final
+    versions of the services and generate final snapshots of the data.
 - **Swap every `-rc` / `-dev` image tag and `-rcN` snapshot in the `green` block
     to its final value** (see [Final versions](#final-versions)).
+- Make sure things are still as they should in staging.
+
+On release day:
 - Set `production: green`.
 - Re-apply: `make deploy-chart-prod-platform`. The prod Services now select green
     pods. Blue keeps running (now the staging colour) as a rollback.
