@@ -4,11 +4,11 @@ icon: lucide/rocket
 
 # Release Process
 * We have four releases per year, usually at the end of each quarter: `YY.03`,
-  `YY.06`, `YY.09`, `YY.12`.
+    `YY.06`, `YY.09`, `YY.12`.
 * There are two product flavors — **Platform** and **Partner Preview Platform
-  (PPP)**. These run as coexisting deployments in separate namespaces. PPP is
-  usually released one week after Platform. PPP follows the same mechanics in
-  the `*-ppp` namespace with its own images and snapshots.
+    (PPP)**. These run as coexisting deployments in separate namespaces. PPP is
+    usually released one week after Platform. PPP follows the same mechanics in
+    the `*-ppp` namespace with its own images and snapshots.
 
 ## Useful tools
 - [GCP CLI](https://docs.cloud.google.com/sdk/docs/install-sdk#linux)
@@ -20,8 +20,14 @@ icon: lucide/rocket
 A release consist of:
 
 1. Ideally a week before release date, start up staging with the new RC images and
-  data snapshots.
-2. Apply any fixes that are required there until everything is ready.
+    data snapshots.
+2. All Teams test staging, apply any fixes that are required there until everything
+    is ready.
+3. The day before release:
+    * Build final CH/OS images and tarballs.
+    * Push release to EBI's FTP.
+    * Push release to Google Cloud Storage `open-targets-data-releases` bucket.
+    * Push data to BigQuery dev and BigQuery prod.
 3. On release day, switch staging and production.
 
     !!! Note
@@ -40,7 +46,9 @@ And applied with `make deploy-chart-prod-platform`.
     <br/>
     For this example, we assume `blue` is live and `green` is idle.
 
-### 1. Update config
+### 1. Bring up staging
+
+#### Update deployment config
 First, configure the idle colour with the upcoming release image tags and data
 snapshots.
 
@@ -48,8 +56,8 @@ snapshots.
     set the new `webapp`, `api` and `aiapi` images, the `clickhouse` / `opensearch`
     snapshots, and the `release` value.
 
-    ```yaml title="profiles/production-platform.yaml" linenums="26" hl_lines="5 7 9 11 16 19"
-        --8<-- "https://raw.githubusercontent.com/opentargets/platform-deployment-nextgen/refs/heads/main/profiles/profiles/production-platform.yaml:26:47"
+    ```yaml title="profiles/production-platform.yaml" linenums="26" hl_lines="6 7 9 11 13 18 22"
+        --8<-- "https://raw.githubusercontent.com/opentargets/platform-deployment-nextgen/refs/heads/main/profiles/production-platform.yaml:26:48"
     ```
 
 - At [the start of the file](https://github.com/opentargets/platform-deployment-nextgen/blob/main/profiles/production-platform.yaml#L7-L8),
@@ -62,7 +70,7 @@ snapshots.
 !!! Note
     During testing, `-rc`/`-dev` image tags and `-rcN` snapshots are expected here.
 
-### 2. Bring up staging
+#### Deploy staging
 ```bash
 make deploy-chart-prod-platform
 ```
@@ -72,7 +80,7 @@ as Helm brings up another whole copy of the infra. Green starts on the `staging`
 node pool (which scales up from 0) and is served at `staging.platform.opentargets.org`
 (plus `api.` / `ai.`).
 
-### 3. Test
+### 2. Test
 First checks you can do:
 
 - Use k9s to check that pods are starting properly. Type `:namespaces`, select
@@ -104,32 +112,42 @@ First checks you can do:
 - Head into [the staging platform](https://staging.platform.opentargets.org) and
     check that things look as they should.
 
-### 4. Promote to production
-Before release day:
+### 3. **Day before release**: data publishing
 
+#### Build images and tarballs
 - Once all tests are confirmed to be passing and things look correct, build final
     versions of the services and generate final snapshots of the data.
 - **Swap every `-rc` / `-dev` image tag and `-rcN` snapshot in the `green` block
     to its final value** (see [Final versions](#final-versions)).
 - Make sure things are still as they should in staging.
 
-On release day:
+[WIP]
 
+#### Push to EBI's FTP
+[WIP]
+#### Push to GCP Bucket
+[WIP]
+#### Push to BigQuery
+[WIP]
+
+### 4. **Release day**: Promote staging to production
 - Set `production: green`.
-- Re-apply: `make deploy-chart-prod-platform`. The prod Services now select green
+- Deploy: `make deploy-chart-prod-platform`. The prod Services now select green
     pods. Blue keeps running (now the staging colour) as a rollback.
+- :tada: Celebrate the release! :tada:
 
 ### 5. Decommission staging
 Once the release is confirmed healthy and has been in production for a few days:
 
 - Set `staging: disabled`.
-- Re-apply: `make deploy-chart-prod-platform`. Blue's workloads and their PVCs are
+- Deploy: `make deploy-chart-prod-platform`. Blue's workloads and their PVCs are
     removed and the `staging` node pool scales back to 0.
 
 ### Rollback
 While the old colour is still up (before step 5), rollback is immediate: set
-`production` back to the previous colour and re-apply. After decommission, you
-must bring the old colour back up as staging first, then promote it.
+`production` back to the previous colour and deploy (or `helm rollback`). To rollback
+after having decommisioned the staging env, you must bring the old colour back up
+as staging first, then promote it.
 
 ## Final versions
 Staging runs release-candidate artifacts; production must run final ones. As the
@@ -150,7 +168,7 @@ Same with the ClickHouse and OpenSearch Google Cloud Snapshots.
 
 ## Checklists
 
-### Pre-release
+### Pre-release (One week before release)
 - [ ] [ot-ui-apps](https://github.com/opentargets/ot-ui-apps/tags) tag present
     and has run its CI/CD; image tag exists in [Artifact Registry](https://console.cloud.google.com/artifacts/docker/open-targets-eu-dev/europe-west1/ot-ui-apps/ot-ui-apps?project=open-targets-eu-dev).
 - [ ] [platform-api](https://github.com/opentargets/platform-api/tags) tag present
@@ -160,9 +178,16 @@ Same with the ClickHouse and OpenSearch Google Cloud Snapshots.
 - [ ] ClickHouse and OpenSearch release snapshots created in `open-targets-eu-dev`.
 - [ ] Idle colour configured and `staging: enabled`.
 
-### Promotion
+### Data release (One day before release)
 - [ ] All `-rc` / `-dev` image tags swapped to final.
 - [ ] All `-rcN` snapshots swapped to final.
+- [ ] Images and tarballs built, present in release bucket.
+- [ ] Data pushed to EBI FTP.
+- [ ] Checksums present in the release bucket.
+- [ ] Push to `open-targets-data-releases` bucket.
+- [ ] Push to BigQuery dev and BigQuery prod.
+
+### Release day
 - [ ] `production` flipped to the new colour.
 
 ### Post-release

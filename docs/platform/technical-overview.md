@@ -16,14 +16,14 @@ icon: lucide/network
 
 ```mermaid
 flowchart TD
-  user([User])
-  user --> web["Web app<br/>(React SPA)"]
-  user -->|direct GraphQL| api["API<br/>(GraphQL)"]
-  web -->|GraphQL queries| api
-  web -->|summary requests| ai["AI API<br/>(summarization)"]
-  api --> ch[("ClickHouse")]
-  api --> os[("OpenSearch")]
-  ai -->|prompts| openai((OpenAI))
+    user([User])
+    user --> web["Web app<br/>(React SPA)"]
+    user -->|direct GraphQL| api["API<br/>(GraphQL)"]
+    web -->|GraphQL queries| api
+    web -->|summary requests| ai["AI API<br/>(summarization)"]
+    api --> ch[("ClickHouse")]
+    api --> os[("OpenSearch")]
+    ai -->|prompts| openai((OpenAI))
 ```
 
 Users interact through the web app or by querying the public GraphQL API directly.
@@ -57,7 +57,7 @@ same way.
 - **Terraform**: cluster and cloud resources; state in GCS.
 - **Helm**: applications and data backends (one single chart contains blue/green).
 - [**Config Connector**](https://docs.cloud.google.com/config-connector/docs/overview):
-  Manages GCP resources (static IPs, DNS) from inside the cluster.
+    Manages GCP resources (static IPs, DNS) from inside the cluster.
 
 ### Phases
 #### Terraform
@@ -86,7 +86,7 @@ at the k8s service level.
 
 ##### Services
 - `webapp` simple nginx serving a bundle (See [Dockerfile](https://github.com/opentargets/ot-ui-apps/blob/main/apps/platform/Dockerfile)
-  and [nginx config](https://github.com/opentargets/ot-ui-apps/blob/main/apps/platform/etc/platform.conf)).
+    and [nginx config](https://github.com/opentargets/ot-ui-apps/blob/main/apps/platform/etc/platform.conf)).
 - `api` scala app with an nginx rate-limit sidecar.
 - `aiapi` nodejs application.
 
@@ -138,22 +138,22 @@ When the release passes and things are stable, staging points to production too.
 
 ```mermaid
 flowchart TD
-  user([Browser]) --> glb["Cloud Load Balancer<br/>Cloud CDN · Cloud Armor (PPP) · TLS 1.2"]
-  glb --> ing["GKE Ingress — prod and staging hosts"]
+    user([Browser]) --> glb["Cloud Load Balancer<br/>Cloud CDN · Cloud Armor (PPP) · TLS 1.2"]
+    glb --> ing["GKE Ingress — prod and staging hosts"]
 
-  ing -->|"platform.* · www.*"| websvc[webapp Service]
-  ing -->|"api.*"| apisvc[api Service]
-  ing -->|"ai.*"| aisvc[aiapi Service]
+    ing -->|"platform.* · www.*"| websvc[webapp Service]
+    ing -->|"api.*"| apisvc[api Service]
+    ing -->|"ai.*"| aisvc[aiapi Service]
 
-  subgraph ns["Namespace (e.g. production-platform)"]
-    websvc -. selects live colour .-> web[webapp pods]
-    apisvc -. selects live colour .-> api["api pods<br/>+ nginx rate-limit"]
-    aisvc -. selects live colour .-> ai[aiapi pods]
-    api --> ch[("ClickHouse")]
-    api --> os[("OpenSearch")]
-  end
+    subgraph ns["Namespace (e.g. production-platform)"]
+        websvc -. selects live colour .-> web[webapp pods]
+        apisvc -. selects live colour .-> api["api pods<br/>+ nginx rate-limit"]
+        aisvc -. selects live colour .-> ai[aiapi pods]
+        api --> ch[("ClickHouse")]
+        api --> os[("OpenSearch")]
+    end
 
-  ai -->|token via Secret Manager| openai((OpenAI))
+    ai -->|token via Secret Manager| openai((OpenAI))
 ```
 
 ### Networking
