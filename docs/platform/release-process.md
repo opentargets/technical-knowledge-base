@@ -126,7 +126,6 @@ First checks you can do:
 #### Push to EBI's FTP
 
 - Make sure you have HPC cluster access, if not request HPC Cluster Access in IT requests.
-- ssh into codon slurm and ask to be allocated time and resources.
 - ftp sync (also calculates checksums and writes those back to GCS):
 `uv run pos ftp-sync` then wait for the job completed (successfully/unsuccessfully) email.
 
