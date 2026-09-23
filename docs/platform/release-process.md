@@ -124,11 +124,19 @@ First checks you can do:
 [WIP]
 
 #### Push to EBI's FTP
-[WIP]
+
+- Make sure you have HPC cluster access, if not request HPC Cluster Access in IT requests.
+- ftp sync (also calculates checksums and writes those back to GCS):
+`uv run pos ftp-sync` then wait for the job completed (successfully/unsuccessfully) email.
+
+After that do GCS sync and AWS sync
+
 #### Push to GCP Bucket
 [WIP]
+
 #### Push to BigQuery
-[WIP]
+```uv run pos bigquery --instance dev```
+```uv run pos bigquery --instance prod```
 
 ### 4. **Release day**: Promote staging to production
 - Set `production: green`.
